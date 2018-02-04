@@ -4,14 +4,19 @@ import withRedux from 'next-redux-wrapper'
 
 import makeStore from '../store'
 import { getJokes } from '../store/reducers'
-import Form from '../components/Form'
-import Container from '../components/Container'
+
 import Divider from '../components/Divider'
-import Modal from '../components/Modal'
 import List from '../components/List'
-import Button from '../components/Button'
 import FlexBox from '../components/FlexBox'
 import ModalForm from '../components/ModalForm'
+import FooterNav from '../components/FooterNav'
+
+injectGlobal`
+  body {
+    background: palevioletred;
+    color: white;
+  }
+`
 
 const enhance = compose(
   withState('modalActive', 'setModalActive', false),
@@ -35,16 +40,14 @@ const Index = enhance(props => (
       alignContent="center"
     >
       <div>
-        <h1>A Joke From Chuck Norris</h1>
-        <Button outlined color="palevioletred" onClick={props.fetchRandomJoke}>
-					Get Some random joke
-        </Button>
-        <span> or </span>
-        <Button outlined color="black " onClick={props.toggleModal}>
-					Advance Option
-        </Button>
-        <Divider />
-        <List.Unordered>{props.jokes.map((j, i) => <li key={i}>{j}</li>)}</List.Unordered>
+        <FlexBox justify="center">
+          <h1>A Joke From Chuck Norris</h1>
+        </FlexBox>
+        <Divider color="white" />
+        <FlexBox justify="center">
+          <List.Unordered>{props.jokes.map((j, i) => <li key={i}>{j}</li>)}</List.Unordered>
+        </FlexBox>
+        <FooterNav fetchRandomJoke={props.fetchRandomJoke} toggleModal={props.toggleModal} />
       </div>
     </FlexBox>
   </div>
