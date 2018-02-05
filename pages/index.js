@@ -3,9 +3,8 @@ import styled, { injectGlobal } from 'styled-components'
 import withRedux from 'next-redux-wrapper'
 
 import makeStore from '../store'
-import { getJokes } from '../store/reducers'
+import { getJokes, getNumberOfJokes } from '../store/reducers'
 
-import Divider from '../components/Divider'
 import FlexBox from '../components/FlexBox'
 import ModalForm from '../components/ModalForm'
 import FooterNav from '../components/FooterNav'
@@ -19,25 +18,25 @@ injectGlobal`
 `
 
 const Page = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
+	width: 100%;
+	height: 100%;
+	position: absolute;
 `
 const PageTitle = styled.h1`
-  border: 2px solid white;
-  padding: 8px;
-  margin: 8px;
-  font-size: 1em;
-  @media (min-width: 768px) {
-    font-size: 2em;
-  }
+	border: 2px solid white;
+	padding: 8px;
+	margin: 8px;
+	font-size: 1em;
+	@media (min-width: 768px) {
+		font-size: 2em;
+	}
 `
 
 const CenteredFlexbox = FlexBox.extend`
-  position: relative;
-  align-items: center;
-  width: 100%;
-  min-height: 70%;
+	position: relative;
+	align-items: center;
+	width: 100%;
+	min-height: 70%;
 `
 
 const enhance = compose(
@@ -49,6 +48,7 @@ const enhance = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchJokes()
+      this.props.fetchNumberOfJokes()
     },
   }),
 )
@@ -61,9 +61,7 @@ const Index = enhance(props => (
       handleSubmit={props.fetchJokes}
     />
     <FlexBox justify="center">
-      <PageTitle>
-        A JOKE FROM CHUCK NORRIS
-      </PageTitle>
+      <PageTitle>A JOKE FROM CHUCK NORRIS</PageTitle>
     </FlexBox>
     <CenteredFlexbox>
       <Jokes />
@@ -74,6 +72,7 @@ const Index = enhance(props => (
 
 const mapDispatchToProps = dispatch => ({
   fetchJokes: (id, num, query) => getJokes(dispatch, id, num, query),
+  fetchNumberOfJokes: () => getNumberOfJokes(dispatch),
 })
 
 export default withRedux(makeStore, state => state, mapDispatchToProps)(Index)

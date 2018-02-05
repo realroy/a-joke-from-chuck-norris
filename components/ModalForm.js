@@ -1,6 +1,6 @@
 import Button from './Button'
 import FlexBox from './FlexBox'
-import AdvanceOptions from './AdvanceOptions'
+import AdvanceSearch from './AdvanceSearch'
 import Modal from './Modal'
 
 const ModalForm = ({ active, handleToggle, handleSubmit }) => (
@@ -10,7 +10,7 @@ const ModalForm = ({ active, handleToggle, handleSubmit }) => (
 				Close
       </Button>
     </FlexBox>
-    <AdvanceOptions handleSubmit={handleSubmit} afterSubmit={handleToggle} />
+    <AdvanceSearch afterSubmit={handleToggle} />
   </Modal>
 )
 

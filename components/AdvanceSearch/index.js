@@ -1,5 +1,7 @@
 import { compose, withState, withHandlers } from 'recompose'
+import { connect } from 'react-redux'
 
+import { updateOptions, getJokes } from '../../store/reducers'
 import Divider from '../Divider'
 import {
   Form,
@@ -12,20 +14,15 @@ import {
   ChoiceSubGroup,
   InputSubmit,
 } from '../Form'
-import { onSubmit, handleSelectMultipleOrSingle, handleChange } from './handlers'
-
+import { handleSubmit, handleSelectMultipleOrSingle } from './handles'
 
 const enhance = compose(
   withState('isMultiple', 'setIsMultiple', true),
-  withState('firstName', 'setFirstName', ''),
-  withState('lastName', 'setLastName', ''),
-  withState('num', 'setNum', 1),
-  withState('id', 'setID', 0),
-  withHandlers({ onSubmit, handleSelectMultipleOrSingle, handleChange }),
+  withHandlers({ handleSubmit, handleSelectMultipleOrSingle }),
 )
 
-const AdvanceOptions = enhance(props => (
-  <Form onSubmit={props.onSubmit}>
+const AdvanceSearch = enhance(props => (
+  <Form onSubmit={props.handleSubmit}>
     <div>
       <Title>Advance Options</Title>
       <GroupTitle>Insert your prefer name to the joke</GroupTitle>
@@ -36,8 +33,8 @@ const AdvanceOptions = enhance(props => (
           <Input
             type="text"
             id="first-name"
-            value={props.firstName}
-            onChange={props.handleChange}
+            value={props.options.query.firstName}
+            onChange={props.dispatchChange}
             placeholder="Specify first name"
           />
         </SubGroup>
@@ -46,8 +43,8 @@ const AdvanceOptions = enhance(props => (
           <Input
             type="text"
             id="last-name"
-            value={props.lastName}
-            onChange={props.handleChange}
+            value={props.options.query.lastName}
+            onChange={props.dispatchChange}
             placeholder="Specify last name"
           />
         </SubGroup>
@@ -61,9 +58,10 @@ const AdvanceOptions = enhance(props => (
             disable={!props.isMultiple}
             type="number"
             id="num"
-            value={props.num}
-            onChange={props.handleChange}
+            value={props.options.num}
+            onChange={props.dispatchChange}
             min={0}
+            max={props.maxJokes}
             placeholder="Specify number of jokes"
           />
         </ChoiceSubGroup>
@@ -74,8 +72,9 @@ const AdvanceOptions = enhance(props => (
             type="number"
             id="id"
             min={0}
-            onChange={props.handleChange}
-            value={props.id}
+            max={props.maxJokes}
+            onChange={props.dispatchChange}
+            value={props.options.id}
             placeholder="Specify id of joke"
           />
         </ChoiceSubGroup>
@@ -88,4 +87,17 @@ const AdvanceOptions = enhance(props => (
   </Form>
 ))
 
-export default AdvanceOptions
+const mapDispatchToProps = dispatch => ({
+  dispatchJokes: (id, num, query) => getJokes(dispatch, id, num, query),
+  dispatchChange: (event) => {
+    const { id, value } = event.target
+    let options = {}
+    if (id === 'first-name') options = { query: { firstName: value.trim() } }
+    else if (id === 'last-name') options = { query: { lastName: value.trim() } }
+    else if (id === 'num') options = { num: parseInt(value, 10), id: 0 }
+    else if (id === 'id') options = { id: parseInt(value, 10), num: 0 }
+    dispatch(updateOptions(options))
+  },
+})
+
+export default connect(state => state, mapDispatchToProps)(AdvanceSearch)

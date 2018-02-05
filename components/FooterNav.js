@@ -5,24 +5,28 @@ import FlexBox from './FlexBox'
 import Button from './Button'
 
 const CustomFooter = Footer.extend`
-  @media (max-width: 320px) {
-    flex-direction: column;
-    ${Button} {
-      width: 100%;
-    }
-  }
+	@media (max-width: 320px) {
+		flex-direction: column;
+		${Button} {
+			width: 100%;
+		}
+	}
 `
 
-const FooterNav = ({ fetchRandomJoke, toggleModal }) => (
+const FooterNav = ({ fetchRandomJoke, toggleModal, isFetchingJokes }) => (
   <CustomFooter>
     <FlexBox justify="center" alignItems="center">
       <div>
-        <Button color="palevioletred" onClick={fetchRandomJoke}>
-					Get Some random joke
-        </Button>
+        {isFetchingJokes ? (
+          <Button color="palevioletred">Please Wait</Button>
+				) : (
+  <Button color="palevioletred" onClick={fetchRandomJoke}>
+						Get Some random joke
+  </Button>
+				)}
         <span> or </span>
         <Button outlined color="black " onClick={toggleModal}>
-					Advance Option
+					Advance Search
         </Button>
       </div>
     </FlexBox>
