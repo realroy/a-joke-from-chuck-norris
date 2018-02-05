@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { withState, compose, withHandlers, lifecycle } from 'recompose'
 import styled, { injectGlobal } from 'styled-components'
 import withRedux from 'next-redux-wrapper'
@@ -10,6 +11,7 @@ import ModalForm from '../components/ModalForm'
 import FooterNav from '../components/FooterNav'
 import Jokes from '../components/Jokes'
 
+/* eslint-disable no-unused-expressions */
 injectGlobal`
   body {
     background: palevioletred;
@@ -18,47 +20,52 @@ injectGlobal`
 `
 
 const Page = styled.div`
-	width: 100%;
-	height: 100%;
-	position: absolute;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 `
 const PageTitle = styled.h1`
-	border: 2px solid white;
-	padding: 8px;
-	margin: 8px;
-	font-size: 1em;
-	@media (min-width: 768px) {
-		font-size: 2em;
-	}
+  border: 2px solid white;
+  padding: 8px;
+  margin: 8px;
+  font-size: 1em;
+  @media (min-width: 768px) {
+    font-size: 2em;
+  }
 `
 
 const CenteredFlexbox = FlexBox.extend`
-	position: relative;
-	align-items: center;
-	width: 100%;
-	min-height: 70%;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  min-height: 70%;
 `
 
 const enhance = compose(
-  withState('modalActive', 'setModalActive', false),
+  withState('isModalActive', 'setModalActive', false),
   withHandlers({
-    toggleModal: ({ setModalActive }) => () => setModalActive(n => !n),
-    fetchRandomJoke: ({ fetchJokes }) => () => fetchJokes(),
+    handleToggleModal: ({ setModalActive }) => () => setModalActive(n => !n),
+    handlefetchRandomJoke: ({ fetchJokes }) => () => fetchJokes(),
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchJokes()
-      this.props.fetchNumberOfJokes()
+      this.props.dispatchFetchJokes()
+      this.props.dispatchFetchNumberOfJokes()
     },
   }),
 )
 
-const Index = enhance(props => (
+const Index = ({
+  isModalActive,
+  handleToggleModal,
+  dispatchFetchJokes,
+  handleFetchRandomJoke,
+}) => (
   <Page>
     <ModalForm
-      active={props.modalActive}
-      handleToggle={props.toggleModal}
-      handleSubmit={props.fetchJokes}
+      active={isModalActive}
+      handleToggle={handleToggleModal}
+      handleSubmit={dispatchFetchJokes}
     />
     <FlexBox justify="center">
       <PageTitle>A JOKE FROM CHUCK NORRIS</PageTitle>
@@ -66,13 +73,20 @@ const Index = enhance(props => (
     <CenteredFlexbox>
       <Jokes />
     </CenteredFlexbox>
-    <FooterNav fetchRandomJoke={props.fetchRandomJoke} toggleModal={props.toggleModal} />
+    <FooterNav fetchRandomJoke={handleFetchRandomJoke} toggleModal={handleToggleModal} />
   </Page>
-))
+)
+
+Index.propTypes = {
+  isModalActive: PropTypes.bool.isRequired,
+  handleToggleModal: PropTypes.func.isRequired,
+  dispatchFetchJokes: PropTypes.func.isRequired,
+  handleFetchRandomJoke: PropTypes.func.isRequired,
+}
 
 const mapDispatchToProps = dispatch => ({
-  fetchJokes: (id, num, query) => getJokes(dispatch, id, num, query),
-  fetchNumberOfJokes: () => getNumberOfJokes(dispatch),
+  dispatchFetchJokes: (id, num, query) => getJokes(dispatch, id, num, query),
+  dispatchFetchNumberOfJokes: () => getNumberOfJokes(dispatch),
 })
 
-export default withRedux(makeStore, state => state, mapDispatchToProps)(Index)
+export default withRedux(makeStore, state => state, mapDispatchToProps)(enhance(Index))

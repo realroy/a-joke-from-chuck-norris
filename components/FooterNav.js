@@ -1,16 +1,16 @@
-import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import Footer from './Footer'
 import FlexBox from './FlexBox'
 import Button from './Button'
 
 const CustomFooter = Footer.extend`
-	@media (max-width: 320px) {
-		flex-direction: column;
-		${Button} {
-			width: 100%;
-		}
-	}
+  @media (max-width: 320px) {
+    flex-direction: column;
+    ${Button} {
+      width: 100%;
+    }
+  }
 `
 
 const FooterNav = ({ fetchRandomJoke, toggleModal, isFetchingJokes }) => (
@@ -32,5 +32,11 @@ const FooterNav = ({ fetchRandomJoke, toggleModal, isFetchingJokes }) => (
     </FlexBox>
   </CustomFooter>
 )
+
+FooterNav.propTypes = {
+  fetchRandomJoke: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+  isFetchingJokes: PropTypes.bool.isRequired,
+}
 
 export default FooterNav

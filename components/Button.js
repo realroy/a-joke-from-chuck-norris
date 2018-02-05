@@ -26,7 +26,7 @@ export const defaultBtn = color => `
 `
 
 const Button = styled.button`
-	${({ outlined, color }) => (outlined ? outlinedBtn(color) : defaultBtn(color))};
+  ${({ outlined, color }) => (outlined ? outlinedBtn(color) : defaultBtn(color))};
 `
 
 export default Button
