@@ -107,7 +107,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         jokeIndex: isInRange(action.index, 0, state.jokes.length)
-          ? state.jokeIndex + action.index
+          ? action.index
           : state.jokeIndex,
       }
     default:

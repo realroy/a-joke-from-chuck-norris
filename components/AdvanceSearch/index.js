@@ -28,8 +28,13 @@ const mapDispatchToProps = dispatch => ({
     let options = {}
     if (id === 'first-name') options = { query: { firstName: value.trim() } }
     else if (id === 'last-name') options = { query: { lastName: value.trim() } }
-    else if (id === 'num') options = { num: parseInt(value, 10), id: 0 }
-    else if (id === 'id') options = { id: parseInt(value, 10), num: 0 }
+    else if (id === 'num') {
+      const num = parseInt(value, 10) || 0
+      options = { num, id: 0 }
+    } else if (id === 'id') {
+      const result = parseInt(value, 10) || 0
+      options = { id: result, num: 0 }
+    }
     dispatch(updateOptions(options))
   },
 })

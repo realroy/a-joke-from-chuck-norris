@@ -17,8 +17,8 @@ const mapDispatchToProps = dispatch => ({
   dispatchNextJoke: () => dispatch(nextJokeIndex()),
   dispatchPrevJoke: () => dispatch(prevJokeIndex()),
   dispatchGoToJokeIndex: (event) => {
-    const value = parseInt(event.target.value, 10)
-    if (value) dispatch(goToJokeIndex(value))
+    const value = parseInt(event.target.value, 10) || 0
+    dispatch(goToJokeIndex(value))
   },
 })
 
