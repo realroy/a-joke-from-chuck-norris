@@ -50,7 +50,10 @@ export const getNumberOfJokes = (dispatch) => {
     .catch(error => dispatch(fetchNumberOfJokesFailure(error)))
 }
 
-const isInRange = (value, min, max) => (value <= max && value >= min)
+export const isInRange = (testValue, startingPoint, endingPoint) => (
+  testValue <= endingPoint &&
+  testValue >= startingPoint
+)
 
 export default (state = initialState, action) => {
   switch (action.type) {

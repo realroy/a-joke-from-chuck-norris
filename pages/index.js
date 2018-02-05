@@ -45,7 +45,7 @@ const enhance = compose(
   withState('isModalActive', 'setModalActive', false),
   withHandlers({
     handleToggleModal: ({ setModalActive }) => () => setModalActive(n => !n),
-    handlefetchRandomJoke: ({ fetchJokes }) => () => fetchJokes(),
+    handleFetchRandomJoke: ({ fetchJokes }) => () => fetchJokes(),
   }),
   lifecycle({
     componentWillMount() {

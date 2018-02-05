@@ -6,7 +6,7 @@ const sharedAttributes = color => `
   transition: ease-out .5s;
 `
 
-export const outlinedBtn = color => `
+const outlinedBtn = color => `
   background: white;
   color: ${color};
   ${sharedAttributes(color)}
@@ -15,7 +15,7 @@ export const outlinedBtn = color => `
     color: white;
   }
 `
-export const defaultBtn = color => `
+const defaultBtn = color => `
   background: ${color};
   color: white;
   ${sharedAttributes(color)}
