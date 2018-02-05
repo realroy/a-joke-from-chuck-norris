@@ -8,6 +8,7 @@ export const Group = FlexBox.extend`
   color: black;
 	border: ${({ borderSize }) => borderSize || 1}px solid palevioletred;
 	margin-bottom: 8px;
+	flex-wrap: wrap;
 `
 
 export const SubGroup = FlexBox.extend`
@@ -57,7 +58,7 @@ export const Title = styled.h1`
 export const Form = styled.form`
 	background: white;
 	width: 100%;
-	height: 100%;
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 `
