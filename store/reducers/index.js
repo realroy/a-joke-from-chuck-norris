@@ -4,13 +4,19 @@ export const initialState = {
   error: null,
   jokes: [],
   isFetching: false,
+  options: {
+  }
 }
 
+export const fetchJokesRequest = () => ({ type: 'FETCH_JOKES_REQUEST' })
+export const fetchJokesSuccess = jokes => ({ type: 'FETCH_JOKES_SUCCESS', jokes })
+export const fetchJokesFailure = error => ({ type: 'FETCH_JOKES_FAILURE', error })
+
 export const getJokes = (dispatch, id, num, query) => {
-  dispatch({ type: 'FETCH_JOKES_REQUEST' })
+  fetchJokesRequest()
   fetchJokes(id, num, query)
-    .then(jokes => dispatch({ type: 'FETCH_JOKES_SUCCESS', jokes }))
-    .catch(error => dispatch({ type: 'FETCH_JOKES_FAILURE', error }))
+    .then(jokes => dispatch(fetchJokesSuccess(jokes)))
+    .catch(error => dispatch(fetchJokesFailure(error)))
 }
 
 export default (state = initialState, action) => {

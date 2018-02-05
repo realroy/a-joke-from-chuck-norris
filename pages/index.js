@@ -1,15 +1,15 @@
-import { withState, compose, withHandlers } from 'recompose'
-import { injectGlobal } from 'styled-components'
+import { withState, compose, withHandlers, lifecycle } from 'recompose'
+import styled, { injectGlobal } from 'styled-components'
 import withRedux from 'next-redux-wrapper'
 
 import makeStore from '../store'
 import { getJokes } from '../store/reducers'
 
 import Divider from '../components/Divider'
-import List from '../components/List'
 import FlexBox from '../components/FlexBox'
 import ModalForm from '../components/ModalForm'
 import FooterNav from '../components/FooterNav'
+import Jokes from '../components/Jokes'
 
 injectGlobal`
   body {
@@ -18,39 +18,58 @@ injectGlobal`
   }
 `
 
+const Page = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+`
+const PageTitle = styled.h1`
+  border: 2px solid white;
+  padding: 8px;
+  margin: 8px;
+  font-size: 1em;
+  @media (min-width: 768px) {
+    font-size: 2em;
+  }
+`
+
+const CenteredFlexbox = FlexBox.extend`
+  position: relative;
+  align-items: center;
+  width: 100%;
+  min-height: 70%;
+`
+
 const enhance = compose(
   withState('modalActive', 'setModalActive', false),
   withHandlers({
     toggleModal: ({ setModalActive }) => () => setModalActive(n => !n),
     fetchRandomJoke: ({ fetchJokes }) => () => fetchJokes(),
   }),
+  lifecycle({
+    componentWillMount() {
+      this.props.fetchJokes()
+    },
+  }),
 )
 
 const Index = enhance(props => (
-  <div>
+  <Page>
     <ModalForm
       active={props.modalActive}
       handleToggle={props.toggleModal}
       handleSubmit={props.fetchJokes}
     />
-    <FlexBox
-      style={{ width: '100%', height: '100%' }}
-      justify="center"
-      alignItems="center"
-      alignContent="center"
-    >
-      <div>
-        <FlexBox justify="center">
-          <h1>A Joke From Chuck Norris</h1>
-        </FlexBox>
-        <Divider color="white" />
-        <FlexBox justify="center">
-          <List.Unordered>{props.jokes.map((j, i) => <li key={i}>{j}</li>)}</List.Unordered>
-        </FlexBox>
-        <FooterNav fetchRandomJoke={props.fetchRandomJoke} toggleModal={props.toggleModal} />
-      </div>
+    <FlexBox justify="center">
+      <PageTitle>
+        A JOKE FROM CHUCK NORRIS
+      </PageTitle>
     </FlexBox>
-  </div>
+    <CenteredFlexbox>
+      <Jokes />
+    </CenteredFlexbox>
+    <FooterNav fetchRandomJoke={props.fetchRandomJoke} toggleModal={props.toggleModal} />
+  </Page>
 ))
 
 const mapDispatchToProps = dispatch => ({

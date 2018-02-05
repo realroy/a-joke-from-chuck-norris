@@ -1,9 +1,20 @@
+import styled from 'styled-components'
+
 import Footer from './Footer'
 import FlexBox from './FlexBox'
 import Button from './Button'
 
+const CustomFooter = Footer.extend`
+  @media (max-width: 320px) {
+    flex-direction: column;
+    ${Button} {
+      width: 100%;
+    }
+  }
+`
+
 const FooterNav = ({ fetchRandomJoke, toggleModal }) => (
-  <Footer>
+  <CustomFooter>
     <FlexBox justify="center" alignItems="center">
       <div>
         <Button color="palevioletred" onClick={fetchRandomJoke}>
@@ -15,7 +26,7 @@ const FooterNav = ({ fetchRandomJoke, toggleModal }) => (
         </Button>
       </div>
     </FlexBox>
-  </Footer>
+  </CustomFooter>
 )
 
 export default FooterNav

@@ -1,7 +1,7 @@
-import Button from '../Button'
-import FlexBox from '../FlexBox'
-import Form from '../Form'
-import Modal from '../Modal'
+import Button from './Button'
+import FlexBox from './FlexBox'
+import AdvanceOptions from './AdvanceOptions'
+import Modal from './Modal'
 
 const ModalForm = ({ active, handleToggle, handleSubmit }) => (
   <Modal active={active}>
@@ -10,7 +10,7 @@ const ModalForm = ({ active, handleToggle, handleSubmit }) => (
 				Close
       </Button>
     </FlexBox>
-    <Form handleSubmit={handleSubmit} afterSubmit={handleToggle} />
+    <AdvanceOptions handleSubmit={handleSubmit} afterSubmit={handleToggle} />
   </Modal>
 )
 
