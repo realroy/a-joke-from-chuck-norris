@@ -1,7 +1,7 @@
 {
   "name": "a-joke-from-chuck-norris",
   "version": "1.0.0",
-  "description": "",
+  "description": "A",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
