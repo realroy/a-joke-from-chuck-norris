@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 
-export const API_ENDPOINT = 'http://api.icndb.com'
+export const API_ENDPOINT = 'https://api.icndb.com'
 
 export const createJokesURL = (id, num) => {
   if (id) return `${API_ENDPOINT}/jokes/${id}`
