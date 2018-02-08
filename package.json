@@ -6,8 +6,8 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "dev": "next",
-    "build": "next build",
-    "start": "npm run build && next start"
+    "start": "next start -p $PORT",
+    "heroku-postbuild": "next build"
   },
   "keywords": [],
   "author": "",
