@@ -55,7 +55,7 @@ export const isInRange = (testValue, startingPoint, endingPoint) => (
   testValue >= startingPoint
 )
 
-export default (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'FETCH_JOKES_REQUEST':
       return { ...state, isFetchingJokes: true }
@@ -114,4 +114,6 @@ export default (state = initialState, action) => {
       return state
   }
 }
+
+export default reducer
 

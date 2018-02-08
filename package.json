@@ -7,7 +7,7 @@
     "test": "NODE_ENV=test jest",
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "npm run build && next start"
   },
   "keywords": [],
   "author": "",
