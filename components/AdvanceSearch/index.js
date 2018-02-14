@@ -89,6 +89,10 @@ const AdvanceSearch = ({
             max={maxJokes}
             placeholder="Specify number of jokes"
           />
+          <Label htmlFor="categories">Categories</Label>
+          <select name="categories" id="categories">
+            <option value="all" select>All</option>
+          </select>
         </ChoiceSubGroup>
         <ChoiceSubGroup active={!isMultiple} onClick={handleSelectMultipleOrSingle}>
           <Label htmlFor="id">Get joke with id</Label>

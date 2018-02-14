@@ -104,11 +104,12 @@ export const reducer = (state = initialState, action) => {
         fetchingNumberOfJokesError: action.error,
       }
     case 'GO_TO_JOKE_INDEX':
+      const jokeIndex = isInRange(action.index, 0, state.jokes.length)
+        ? action.index
+        : state.index
       return {
         ...state,
-        jokeIndex: isInRange(action.index, 0, state.jokes.length)
-          ? action.index
-          : state.jokeIndex,
+        jokeIndex, 
       }
     default:
       return state

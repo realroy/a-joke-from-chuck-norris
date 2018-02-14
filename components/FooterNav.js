@@ -1,8 +1,11 @@
-import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types';
 
-import Footer from './Footer'
-import FlexBox from './FlexBox'
-import Button from './Button'
+import { getJokes } from '../store/reducers'
+
+import Footer from './Footer';
+import FlexBox from './FlexBox';
+import Button from './Button';
 
 const CustomFooter = Footer.extend`
   @media (max-width: 320px) {
@@ -11,16 +14,16 @@ const CustomFooter = Footer.extend`
       width: 100%;
     }
   }
-`
+`;
 
-const FooterNav = ({ fetchRandomJoke, toggleModal, isFetchingJokes }) => (
+const FooterNav = ({ dispatchFetchRandomJoke, toggleModal, isFetchingJokes }) => (
   <CustomFooter>
     <FlexBox justify="center" alignItems="center">
       <div>
         {isFetchingJokes ? (
           <Button color="palevioletred">Please Wait</Button>
 				) : (
-  <Button color="palevioletred" onClick={fetchRandomJoke}>
+  <Button color="palevioletred" onClick={dispatchFetchRandomJoke}>
 						Get Some random joke
   </Button>
 				)}
@@ -31,12 +34,18 @@ const FooterNav = ({ fetchRandomJoke, toggleModal, isFetchingJokes }) => (
       </div>
     </FlexBox>
   </CustomFooter>
-)
+);
 
 FooterNav.propTypes = {
-  fetchRandomJoke: PropTypes.func.isRequired,
+  dispatchFetchRandomJoke: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
   isFetchingJokes: PropTypes.bool.isRequired,
-}
+};
 
-export default FooterNav
+const mapStateToProps = ({ isFetchingJokes }) => ({ isFetchingJokes })
+
+const mapDispatchToProps = dispatch => ({
+  dispatchFetchRandomJoke: () => getJokes(dispatch),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(FooterNav);
