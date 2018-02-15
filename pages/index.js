@@ -41,7 +41,15 @@ const CenteredFlexbox = FlexBox.extend`
 	min-height: 70%;
 `;
 
+const mapDispatchToProps = dispatch => ({
+  dispatchFetchJokes: (options, categories) =>
+    getJokes(dispatch, options, categories),
+  dispatchFetchNumberOfJokes: () => getNumberOfJokes(dispatch),
+  dispatchFetchCategories: () => getCategories(dispatch),
+});
+
 const enhance = compose(
+  withRedux(makeStore, state => state, mapDispatchToProps),
   withState('isModalActive', 'setModalActive', false),
   withHandlers({
     handleToggleModal: ({ setModalActive }) => () => setModalActive(n => !n),
@@ -49,7 +57,7 @@ const enhance = compose(
   }),
   lifecycle({
     componentWillMount() {
-      const { options, categories } = this.props
+      const { options, categories } = this.props;
       this.props.dispatchFetchJokes(options, categories);
       this.props.dispatchFetchNumberOfJokes();
       this.props.dispatchFetchCategories();
@@ -75,10 +83,5 @@ Index.propTypes = {
   handleToggleModal: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  dispatchFetchJokes: (id, num, query, categories) => getJokes(dispatch, id, num, query, categories),
-  dispatchFetchNumberOfJokes: () => getNumberOfJokes(dispatch),
-  dispatchFetchCategories: () => getCategories(dispatch),
-});
-
-export default withRedux(makeStore, state => state, mapDispatchToProps)(enhance(Index));
+// export default withRedux(makeStore, state => state, mapDispatchToProps)(enhance(Index));
+export default enhance(Index);

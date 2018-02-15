@@ -18,10 +18,6 @@ import {
 } from '../Form'
 import { handleSubmit, handleSelectMultipleOrSingle } from './handles'
 
-const enhance = compose(
-  withState('isMultiple', 'setIsMultiple', true),
-  withHandlers({ handleSubmit, handleSelectMultipleOrSingle }),
-)
 const mapDispatchToProps = dispatch => ({
   dispatchJokes: options => getJokes(dispatch, options),
   dispatchChange: (event) => {
@@ -31,6 +27,12 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateOptions(options))
   },
 })
+
+const enhance = compose(
+  connect(state => state, mapDispatchToProps),
+  withState('isMultiple', 'setIsMultiple', true),
+  withHandlers({ handleSubmit, handleSelectMultipleOrSingle }),
+)
 /* eslint-disable no-shadow */
 const AdvanceSearch = ({
   handleSubmit,
@@ -124,4 +126,4 @@ AdvanceSearch.propTypes = {
   maxJokes: PropTypes.number.isRequired,
 }
 
-export default connect(state => state, mapDispatchToProps)(enhance(AdvanceSearch))
+export default enhance(AdvanceSearch)

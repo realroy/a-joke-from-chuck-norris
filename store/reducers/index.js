@@ -130,7 +130,7 @@ export const reducer = (state = initialState, action) => {
       };
       /* eslint-disable no-case-declarations */
     case 'GO_TO_JOKE_INDEX':
-      const jokeIndex = isInRange(action.index, 0, state.jokes.length)
+      const jokeIndex = isInRange(action.index, 0, state.jokes.length - 1)
         ? action.index
         : state.jokeIndex;
       return {

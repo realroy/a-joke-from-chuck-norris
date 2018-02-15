@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withState, compose, withHandlers } from 'recompose';
 
 import { nextJokeIndex, prevJokeIndex, goToJokeIndex } from '../store/reducers';
 
@@ -10,27 +11,68 @@ import { Input } from './Form';
 const mapDispatchToProps = dispatch => ({
   dispatchNextJoke: () => dispatch(nextJokeIndex()),
   dispatchPrevJoke: () => dispatch(prevJokeIndex()),
-  dispatchGoToJokeIndex: (event) => {
-    const { value } = event.target;
-    dispatch(goToJokeIndex(value));
-  },
+  dispatchGoToJokeIndex: index => dispatch(goToJokeIndex(index)),
 });
+
+const enhance = compose(
+  connect(state => state, mapDispatchToProps),
+  withState('index', 'setIndex', 1),
+  withHandlers({
+    handleNext: ({ setIndex, jokeIndex, jokes, dispatchNextJoke }) => () => {
+      if (jokeIndex < jokes.length - 1) {
+        setIndex(n => n + 1);
+        dispatchNextJoke()
+      }
+    },
+    handlePrev: ({ setIndex, jokeIndex, dispatchPrevJoke }) => () => {
+      if (jokeIndex > 0) {
+        setIndex(n => n - 1)
+        dispatchPrevJoke()
+      }
+    },
+    handleChange: ({ dispatchGoToJokeIndex, setIndex }) => (event) => {
+      const { value } = event.target;
+      setIndex(() => value);
+      const index = parseInt(value.trim(), 10);
+      if (index) dispatchGoToJokeIndex(index - 1);
+    },
+    handleEnterDown: ({ dispatchGoToJokeIndex }) => (event) => {
+      if (event.key === 'Enter') {
+        const { value } = event.target;
+        const index = parseInt(value.trim(), 10);
+        if (index) dispatchGoToJokeIndex(index - 1);
+      }
+    },
+    handleBlur: ({ setIndex, dispatchGoToJokeIndex, jokeIndex }) => ({ target: value }) => {
+      const intValue = parseInt(value, 10);
+      if (intValue) {
+        setIndex(() => intValue);
+        dispatchGoToJokeIndex(intValue - 1);
+      } else {
+        setIndex(jokeIndex + 1);
+      }
+    },
+  }),
+);
 
 const Jokes = ({
   jokes,
   jokeIndex,
-  dispatchNextJoke,
-  dispatchPrevJoke,
-  dispatchGoToJokeIndex,
-  maxJokes
+  handleNext,
+  handlePrev,
+  handleChange,
+  handleEnterDown,
+  handleBlur,
+  maxJokes,
+  index,
 }) => (
   <FullWidthFlexbox direction="column" alignItems="center">
     <FullWidthFlexbox justify="space-between" alignItems="center">
-      <SVGButton onClick={dispatchPrevJoke}>
+      <SVGButton onClick={handlePrev}>
         <img src="/static/imgs/arrow_back.svg" alt="previous-joke" />
       </SVGButton>
-      <JokeQuote>{(!jokes[jokeIndex].joke) ? 'Now loading...' : jokes[jokeIndex].joke}</JokeQuote>
-      <SVGButton onClick={dispatchNextJoke}>
+      <JokeQuote>{!jokes[jokeIndex].joke ? 'Now loading...' : jokes[jokeIndex].joke}</JokeQuote>
+      <SVGButton onClick={handleNext}>
         <img src="/static/imgs/arrow_forward.svg" alt="next-joke" />
       </SVGButton>
     </FullWidthFlexbox>
@@ -39,8 +81,10 @@ const Jokes = ({
         type="number"
         min={maxJokes > 0 ? 1 : 0}
         max={jokes.length}
-        onChange={dispatchGoToJokeIndex}
-        value={jokeIndex + 1}
+        onChange={handleChange}
+        onKeyDown={handleEnterDown}
+        onBlur={handleBlur}
+        value={index}
       />
       <span> of {jokes.length}</span>
     </JokePagination>
@@ -52,7 +96,7 @@ Jokes.propTypes = {
   jokeIndex: PropTypes.number.isRequired,
   dispatchNextJoke: PropTypes.func.isRequired,
   dispatchPrevJoke: PropTypes.func.isRequired,
-  dispatchGoToJokeIndex: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
   maxJokes: PropTypes.number.isRequired,
 };
 
@@ -84,4 +128,4 @@ const JokePagination = styled.div`
 	margin: 8px;
 `;
 
-export default connect(state => state, mapDispatchToProps)(Jokes);
+export default enhance(Jokes);
