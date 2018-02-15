@@ -7,6 +7,7 @@ import AdvanceSearch from './AdvanceSearch'
 
 export const Modal = styled.div`
   display: ${({ active }) => (active ? 'flex' : 'none')};
+  flex-direction: column;
   height: 100%;
   width: 100%;
   position: fixed;

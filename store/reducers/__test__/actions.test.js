@@ -9,6 +9,9 @@ import {
   fetchNumberOfJokesRequest,
   fetchNumberOfJokesSuccess,
   fetchNumberOfJokesFailure,
+  fetchCategoriesRequest,
+  fetchCategoriesSuccess,
+  fetchCategoriesFailure,
 } from '../index'
 
 describe('nextJokeIndex', () => {
@@ -84,9 +87,30 @@ describe('fetchNumberOfJokersSuccess', () => {
   })
 })
 describe('fetchNumberOfJokersFailure', () => {
-  it('should create an actions to add error when fetching number of jokes', () => {
+  it('should create an actions to add error when fetching number of jokes failed', () => {
     const actual = fetchNumberOfJokesFailure(new Error())
     const expected = { type: 'FETCH_NUMBER_OF_JOKES_FAILURE', error: new Error() }
+    expect(actual).toEqual(expected)
+  })
+})
+describe('fetchCategoriesRequest', () => {
+  it('should create an action to active categories fetching status', () => {
+    const actual = fetchCategoriesRequest()
+    const expected = { type: 'FETCH_CATEGORIES_REQUEST' }
+    expect(actual).toEqual(expected)
+  })
+})
+describe('fetchCategoriesSuccess', () => {
+  it('should create an action to add categories to jokes', () => {
+    const actual = fetchCategoriesSuccess(['explicit', 'nerdy'])
+    const expected = { type: 'FETCH_CATEGORIES_SUCCESS', categories: ['explicit', 'nerdy'] }
+    expect(actual).toEqual(expected)
+  })
+})
+describe('fetchCategoriesFailure', () => {
+  it('should create an action to add error when fetching categories failed', () => {
+    const actual = fetchCategoriesFailure(new Error())
+    const expected = { type: 'FETCH_CATEGORIES_FAILURE', error: new Error() }
     expect(actual).toEqual(expected)
   })
 })

@@ -4,7 +4,7 @@ import styled, { injectGlobal } from 'styled-components';
 import withRedux from 'next-redux-wrapper';
 
 import makeStore from '../store';
-import { getJokes, getNumberOfJokes } from '../store/reducers';
+import { getJokes, getNumberOfJokes, getCategories } from '../store/reducers';
 
 import FlexBox from '../components/FlexBox';
 import ModalForm from '../components/ModalForm';
@@ -49,8 +49,10 @@ const enhance = compose(
   }),
   lifecycle({
     componentWillMount() {
-      this.props.dispatchFetchJokes();
+      const { options, categories } = this.props
+      this.props.dispatchFetchJokes(options, categories);
       this.props.dispatchFetchNumberOfJokes();
+      this.props.dispatchFetchCategories();
     },
   }),
 );
@@ -74,8 +76,9 @@ Index.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  dispatchFetchJokes: (id, num, query) => getJokes(dispatch, id, num, query),
+  dispatchFetchJokes: (id, num, query, categories) => getJokes(dispatch, id, num, query, categories),
   dispatchFetchNumberOfJokes: () => getNumberOfJokes(dispatch),
+  dispatchFetchCategories: () => getCategories(dispatch),
 });
 
 export default withRedux(makeStore, state => state, mapDispatchToProps)(enhance(Index));

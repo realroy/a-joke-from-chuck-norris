@@ -7,13 +7,6 @@ import { nextJokeIndex, prevJokeIndex, goToJokeIndex } from '../store/reducers';
 import FlexBox from './FlexBox';
 import { Input } from './Form';
 
-const mapStateToProps = ({ jokes, isFetchingJokes, maxJokes, jokeIndex }) => ({
-  jokes,
-  isFetchingJokes,
-  jokeIndex,
-  maxJokes,
-});
-
 const mapDispatchToProps = dispatch => ({
   dispatchNextJoke: () => dispatch(nextJokeIndex()),
   dispatchPrevJoke: () => dispatch(prevJokeIndex()),
@@ -29,14 +22,14 @@ const Jokes = ({
   dispatchNextJoke,
   dispatchPrevJoke,
   dispatchGoToJokeIndex,
-  maxJokes,
+  maxJokes
 }) => (
   <FullWidthFlexbox direction="column" alignItems="center">
     <FullWidthFlexbox justify="space-between" alignItems="center">
       <SVGButton onClick={dispatchPrevJoke}>
         <img src="/static/imgs/arrow_back.svg" alt="previous-joke" />
       </SVGButton>
-      <JokeQuote>{jokes[jokeIndex]}</JokeQuote>
+      <JokeQuote>{(!jokes[jokeIndex].joke) ? 'Now loading...' : jokes[jokeIndex].joke}</JokeQuote>
       <SVGButton onClick={dispatchNextJoke}>
         <img src="/static/imgs/arrow_forward.svg" alt="next-joke" />
       </SVGButton>
@@ -55,7 +48,7 @@ const Jokes = ({
 );
 
 Jokes.propTypes = {
-  jokes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  jokes: PropTypes.arrayOf(PropTypes.object).isRequired,
   jokeIndex: PropTypes.number.isRequired,
   dispatchNextJoke: PropTypes.func.isRequired,
   dispatchPrevJoke: PropTypes.func.isRequired,
@@ -91,4 +84,4 @@ const JokePagination = styled.div`
 	margin: 8px;
 `;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Jokes);
+export default connect(state => state, mapDispatchToProps)(Jokes);

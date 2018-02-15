@@ -14,6 +14,7 @@ import {
   Input,
   ChoiceSubGroup,
   InputSubmit,
+  Select,
 } from '../Form'
 import { handleSubmit, handleSelectMultipleOrSingle } from './handles'
 
@@ -22,19 +23,11 @@ const enhance = compose(
   withHandlers({ handleSubmit, handleSelectMultipleOrSingle }),
 )
 const mapDispatchToProps = dispatch => ({
-  dispatchJokes: (id, num, query) => getJokes(dispatch, id, num, query),
+  dispatchJokes: options => getJokes(dispatch, options),
   dispatchChange: (event) => {
     const { id, value } = event.target
-    let options = {}
-    if (id === 'first-name') options = { query: { firstName: value.trim() } }
-    else if (id === 'last-name') options = { query: { lastName: value.trim() } }
-    else if (id === 'num') {
-      const num = parseInt(value, 10) || 0
-      options = { num, id: 0 }
-    } else if (id === 'id') {
-      const result = parseInt(value, 10) || 0
-      options = { id: result, num: 0 }
-    }
+    const cleanedValue = Number(value) || value.trim()
+    const options = { [id]: cleanedValue }
     dispatch(updateOptions(options))
   },
 })
@@ -46,6 +39,7 @@ const AdvanceSearch = ({
   isMultiple,
   handleSelectMultipleOrSingle,
   maxJokes,
+  categories,
 }) => (
   <Form onSubmit={handleSubmit}>
     <div>
@@ -54,21 +48,21 @@ const AdvanceSearch = ({
       <Divider color="#AF5A76" border="dotted" />
       <Group>
         <SubGroup>
-          <Label htmlFor="first-name">First Name</Label>
+          <Label htmlFor="firstName">First Name</Label>
           <Input
             type="text"
-            id="first-name"
-            value={options.query.firstName}
+            id="firstName"
+            value={options.firstName}
             onChange={dispatchChange}
             placeholder="Specify first name"
           />
         </SubGroup>
         <SubGroup>
-          <Label htmlFor="last-Name">Last Name</Label>
+          <Label htmlFor="lastName">Last Name</Label>
           <Input
             type="text"
-            id="last-name"
-            value={options.query.lastName}
+            id="lastName"
+            value={options.lastName}
             onChange={dispatchChange}
             placeholder="Specify last name"
           />
@@ -90,9 +84,9 @@ const AdvanceSearch = ({
             placeholder="Specify number of jokes"
           />
           <Label htmlFor="categories">Categories</Label>
-          <select name="categories" id="categories">
-            <option value="all" select>All</option>
-          </select>
+          <Select name="category" id="category" defaultValue={categories[0]}>
+            {categories.map(c => <option key={c} value={c}>{c[0].toUpperCase() + c.substring(1)}</option>)}
+          </Select>
         </ChoiceSubGroup>
         <ChoiceSubGroup active={!isMultiple} onClick={handleSelectMultipleOrSingle}>
           <Label htmlFor="id">Get joke with id</Label>
@@ -117,6 +111,7 @@ const AdvanceSearch = ({
 )
 
 AdvanceSearch.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   options: PropTypes.shape({
     id: PropTypes.number.isRequired,

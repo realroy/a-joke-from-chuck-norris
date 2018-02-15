@@ -61,3 +61,8 @@ export const Form = styled.form`
 	justify-content: center;
 	flex-wrap: wrap;
 `
+export const Select = styled.select`
+	background: white;
+	border: none;
+	padding: 8px 0 8px 0;
+`
