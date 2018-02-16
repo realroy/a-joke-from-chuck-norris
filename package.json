@@ -8,7 +8,7 @@
     "dev": "NODE_ENV=development next",
     "build": "next build",
     "start:pm2": "NODE_ENV=production PORT=80 next build && pm2 start pm2.json",
-    "start": "NODE_ENV=production PORT=80 next build && node ."
+    "start": "NODE_ENV=production next build && node ."
   },
   "engines": {
     "node": "9.x"
