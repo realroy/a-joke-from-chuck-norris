@@ -7,8 +7,7 @@
     "test": "NODE_ENV=test jest",
     "dev": "NODE_ENV=development next",
     "build": "next build",
-    "start": "NODE_ENV=production next build && pm2 start pm2.json --env production",
-    "heroku-postbuild": "npm run build"
+    "start": "NODE_ENV=production next build && pm2 start pm2.json"
   },
   "engines": {
     "node": "9.x"
