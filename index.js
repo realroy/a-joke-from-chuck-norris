@@ -1,7 +1,7 @@
 const express = require('express');
 const next = require('next');
 
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT, 10) || 3000;
 const app = next({ dev: process.env.NODE_ENV === 'development' });
 const handle = app.getRequestHandler();
 
@@ -11,6 +11,6 @@ app.prepare().then(() => {
   server.get('*', (req, res) => handle(req, res));
   server.listen(PORT, (err) => {
     if (err) throw err;
-    console.log('Ready!');
+    console.log(`Server is listening at ${PORT}`);
   });
 });
