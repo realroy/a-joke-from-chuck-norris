@@ -1,9 +1,9 @@
-import { compose, withState, withHandlers } from 'recompose'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import { compose, withState, withHandlers } from 'recompose';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { updateOptions, getJokes } from '../../store/reducers'
-import Divider from '../Divider'
+import { updateOptions, getJokes } from '../store/reducers';
+import Divider from './Divider';
 import {
   Form,
   Title,
@@ -15,24 +15,41 @@ import {
   ChoiceSubGroup,
   InputSubmit,
   Select,
-} from '../Form'
-import { handleSubmit, handleSelectMultipleOrSingle } from './handles'
+} from './Form';
 
 const mapDispatchToProps = dispatch => ({
   dispatchJokes: options => getJokes(dispatch, options),
   dispatchChange: (event) => {
-    const { id, value } = event.target
-    const cleanedValue = Number(value) || value.trim()
-    const options = { [id]: cleanedValue }
-    dispatch(updateOptions(options))
+    const { id, value = '' } = event.target;
+    const cleanedValue = Number(value) || value.trim();
+    let options = { [id]: cleanedValue }
+    if (id === 'id') options = { [id]: cleanedValue, num: 0, category: 'all' }
+    else if (id === 'num') options = { [id]: cleanedValue, id: 0, }
+    dispatch(updateOptions(options));
   },
-})
+});
 
 const enhance = compose(
   connect(state => state, mapDispatchToProps),
   withState('isMultiple', 'setIsMultiple', true),
-  withHandlers({ handleSubmit, handleSelectMultipleOrSingle }),
-)
+  withHandlers({
+    handleSubmit: props => (event) => {
+      event.preventDefault();
+      const {
+        options, dispatchJokes, afterSubmit, categories,
+      } = props;
+      dispatchJokes(options, categories);
+      afterSubmit();
+    },
+    handleSelectMultipleOrSingle: props => (event) => {
+      const { id } = event.target;
+      const { setIsMultiple, dispatchChange } = props;
+      if (id === 'num') setIsMultiple(() => true);
+      else if (id === 'id') setIsMultiple(() => false);
+      dispatchChange(event);
+    },
+  }),
+);
 /* eslint-disable no-shadow */
 const AdvanceSearch = ({
   handleSubmit,
@@ -42,6 +59,7 @@ const AdvanceSearch = ({
   handleSelectMultipleOrSingle,
   maxJokes,
   categories,
+  category,
 }) => (
   <Form onSubmit={handleSubmit}>
     <div>
@@ -86,8 +104,12 @@ const AdvanceSearch = ({
             placeholder="Specify number of jokes"
           />
           <Label htmlFor="categories">Categories</Label>
-          <Select name="category" id="category" defaultValue={categories[0]}>
-            {categories.map(c => <option key={c} value={c}>{c[0].toUpperCase() + c.substring(1)}</option>)}
+          <Select name="category" id="category" value={category}>
+            {categories.map(c => (
+              <option value={c}>
+                {c[0].toUpperCase() + c.substring(1)}
+              </option>
+						))}
           </Select>
         </ChoiceSubGroup>
         <ChoiceSubGroup active={!isMultiple} onClick={handleSelectMultipleOrSingle}>
@@ -110,7 +132,7 @@ const AdvanceSearch = ({
       </Group>
     </div>
   </Form>
-)
+);
 
 AdvanceSearch.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -124,6 +146,6 @@ AdvanceSearch.propTypes = {
   isMultiple: PropTypes.bool.isRequired,
   handleSelectMultipleOrSingle: PropTypes.func.isRequired,
   maxJokes: PropTypes.number.isRequired,
-}
+};
 
-export default enhance(AdvanceSearch)
+export default enhance(AdvanceSearch);

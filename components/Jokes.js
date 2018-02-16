@@ -18,16 +18,18 @@ const enhance = compose(
   connect(state => state, mapDispatchToProps),
   withState('index', 'setIndex', 1),
   withHandlers({
-    handleNext: ({ setIndex, jokeIndex, jokes, dispatchNextJoke }) => () => {
+    handleNext: ({
+      setIndex, jokeIndex, jokes, dispatchNextJoke,
+    }) => () => {
       if (jokeIndex < jokes.length - 1) {
         setIndex(n => n + 1);
-        dispatchNextJoke()
+        dispatchNextJoke();
       }
     },
     handlePrev: ({ setIndex, jokeIndex, dispatchPrevJoke }) => () => {
       if (jokeIndex > 0) {
-        setIndex(n => n - 1)
-        dispatchPrevJoke()
+        setIndex(n => n - 1);
+        dispatchPrevJoke();
       }
     },
     handleChange: ({ dispatchGoToJokeIndex, setIndex }) => (event) => {

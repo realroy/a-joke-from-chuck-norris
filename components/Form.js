@@ -63,6 +63,6 @@ export const Form = styled.form`
 `
 export const Select = styled.select`
 	background: white;
-	border: none;
+	border: 1px solid palevioletred;
 	padding: 8px 0 8px 0;
 `
