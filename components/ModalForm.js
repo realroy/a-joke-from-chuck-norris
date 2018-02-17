@@ -1,9 +1,18 @@
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import Button from './Button';
 import FlexBox from './FlexBox';
 import AdvanceSearch from './AdvanceSearch';
+
+const zoom = keyframes`
+  from {
+    transform:scale(0);
+  }
+  to {
+    transform:scale(1);
+  }
+`
 
 export const Modal = styled.div`
 	display: ${({ active }) => (active ? 'flex' : 'none')};
@@ -13,13 +22,14 @@ export const Modal = styled.div`
 	position: fixed;
 	z-index: 99;
 	background-color: rgba(0, 0, 0, 0.7);
-	padding: 0px;
+  padding: 0px;
 `;
 const ModalContent = styled.div`
 	position: fixed;
-	top: 5%;
+	top: 2%;
 	left: 25%;
   width: 50%;
+  animation: ${zoom} .3s ease-out;
   @media (max-width: 425px) {
 	  top: 2.5%;
     left: 5%;
