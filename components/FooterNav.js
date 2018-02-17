@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import Link from 'next/link'
 import PropTypes from 'prop-types';
 
 import { getJokes } from '../store/reducers'
@@ -16,19 +17,19 @@ const CustomFooter = Footer.extend`
   }
 `;
 
-const FooterNav = ({ dispatchFetchRandomJoke, toggleModal, isFetchingJokes }) => (
+const FooterNav = ({ fetchRandomJoke, toggleModal, isFetchingJokes }) => (
   <CustomFooter>
     <FlexBox justify="center" alignItems="center">
       <div>
         {isFetchingJokes
         ? (<Button color="palevioletred">Please Wait</Button>)
-        : (<Button color="palevioletred" onClick={dispatchFetchRandomJoke}>
-					  Get Some random joke
-          </Button>)}
-        <span> or </span>
-        <Button outlined color="black " onClick={toggleModal}>
-					Advance Search
-        </Button>
+        : (<Button color="palevioletred" onClick={fetchRandomJoke}>Get Some random joke</Button>)}
+        {' '}
+        <Button color=" #70C8DB" onClick={toggleModal}>Advance Search</Button>
+        {' '}
+        <Link href="/statistic" prefetch>
+          <Button color="#70DBB8" onClick={toggleModal}>View Statistic</Button>
+        </Link>
       </div>
     </FlexBox>
   </CustomFooter>
@@ -43,7 +44,7 @@ FooterNav.propTypes = {
 const mapStateToProps = ({ isFetchingJokes }) => ({ isFetchingJokes })
 
 const mapDispatchToProps = dispatch => ({
-  dispatchFetchRandomJoke: () => getJokes(dispatch, {}, {}),
+  fetchRandomJoke: () => getJokes(dispatch, {}, {}),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FooterNav);

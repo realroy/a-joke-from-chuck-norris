@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
+import Head from 'next/head'
 import { withState, compose, withHandlers, lifecycle } from 'recompose';
-import styled, { injectGlobal } from 'styled-components';
+import { injectGlobal } from 'styled-components';
 import withRedux from 'next-redux-wrapper';
 
 import makeStore from '../store';
 import { getJokes, getNumberOfJokes, getCategories } from '../store/reducers';
 
 import FlexBox from '../components/FlexBox';
+import { Page, PageTitle } from '../components/Page'
 import ModalForm from '../components/ModalForm';
 import FooterNav from '../components/FooterNav';
 import Jokes from '../components/Jokes';
@@ -17,21 +19,6 @@ injectGlobal`
     background: palevioletred;
     color: white;
   }
-`;
-
-const Page = styled.div`
-	width: 100%;
-	height: 100%;
-	position: absolute;
-`;
-const PageTitle = styled.h1`
-	border: 6px solid white;
-	padding: 8px;
-	margin: 8px;
-	font-size: 1em;
-	@media (min-width: 768px) {
-		font-size: 2em;
-	}
 `;
 
 const CenteredFlexbox = FlexBox.extend`
@@ -57,16 +44,28 @@ const enhance = compose(
   }),
   lifecycle({
     componentWillMount() {
-      const { options, categories } = this.props;
-      this.props.dispatchFetchJokes(options, categories);
-      this.props.dispatchFetchNumberOfJokes();
-      this.props.dispatchFetchCategories();
+      const {
+        options,
+        categories,
+        dispatchFetchJokes,
+        dispatchFetchCategories,
+        dispatchFetchNumberOfJokes,
+        maxJokes,
+      } = this.props;
+      if (maxJokes !== 0) {
+        dispatchFetchJokes(options, categories);
+        dispatchFetchNumberOfJokes();
+        dispatchFetchCategories();
+      }
     },
   }),
 );
 
 const Index = ({ isModalActive, handleToggleModal }) => (
   <Page>
+    <Head>
+      <title>Joke From Chuck Norris </title>
+    </Head>
     <ModalForm active={isModalActive} handleToggle={handleToggleModal} />
     <FlexBox justify="center">
       <PageTitle>A JOKE FROM CHUCK NORRIS</PageTitle>
@@ -83,5 +82,4 @@ Index.propTypes = {
   handleToggleModal: PropTypes.func.isRequired,
 };
 
-// export default withRedux(makeStore, state => state, mapDispatchToProps)(enhance(Index));
 export default enhance(Index);
