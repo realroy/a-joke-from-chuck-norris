@@ -1,7 +1,7 @@
 const express = require('express');
 const next = require('next');
 
-const PORT = 80;
+const PORT = parseInt(process.env.PORT, 10) || 3000;
 const app = next({ dev: process.env.NODE_ENV === 'development' });
 const handle = app.getRequestHandler();
 

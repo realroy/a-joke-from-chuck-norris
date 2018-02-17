@@ -20,13 +20,11 @@ const FooterNav = ({ dispatchFetchRandomJoke, toggleModal, isFetchingJokes }) =>
   <CustomFooter>
     <FlexBox justify="center" alignItems="center">
       <div>
-        {isFetchingJokes ? (
-          <Button color="palevioletred">Please Wait</Button>
-				) : (
-  <Button color="palevioletred" onClick={dispatchFetchRandomJoke}>
-						Get Some random joke
-  </Button>
-				)}
+        {isFetchingJokes
+        ? (<Button color="palevioletred">Please Wait</Button>)
+        : (<Button color="palevioletred" onClick={dispatchFetchRandomJoke}>
+					  Get Some random joke
+          </Button>)}
         <span> or </span>
         <Button outlined color="black " onClick={toggleModal}>
 					Advance Search
@@ -45,7 +43,7 @@ FooterNav.propTypes = {
 const mapStateToProps = ({ isFetchingJokes }) => ({ isFetchingJokes })
 
 const mapDispatchToProps = dispatch => ({
-  dispatchFetchRandomJoke: () => getJokes(dispatch),
+  dispatchFetchRandomJoke: () => getJokes(dispatch, {}, {}),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FooterNav);

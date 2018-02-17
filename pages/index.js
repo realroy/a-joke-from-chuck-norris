@@ -25,7 +25,7 @@ const Page = styled.div`
 	position: absolute;
 `;
 const PageTitle = styled.h1`
-	border: 2px solid white;
+	border: 6px solid white;
 	padding: 8px;
 	margin: 8px;
 	font-size: 1em;

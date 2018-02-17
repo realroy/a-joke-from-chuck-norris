@@ -22,7 +22,7 @@ export const fetchJokes = async ({ id, num, category, ...rest }, categories) => 
     const res = await axios.get(url.concat(q));
     const { data } = await res;
     if (data.type !== 'success') throw new Error(JSON.stringify(data));
-    return data.value;
+    return Array.isArray(data.value) ? data.value : [data.value];
   } catch (error) {
     return error;
   }

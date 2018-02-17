@@ -66,6 +66,7 @@ const Jokes = ({
   handleEnterDown,
   handleBlur,
   maxJokes,
+  isFetchingJokes,
   index,
 }) => (
   <FullWidthFlexbox direction="column" alignItems="center">
@@ -73,7 +74,7 @@ const Jokes = ({
       <SVGButton onClick={handlePrev}>
         <img src="/static/imgs/arrow_back.svg" alt="previous-joke" />
       </SVGButton>
-      <JokeQuote>{!jokes[jokeIndex].joke ? 'Now loading...' : jokes[jokeIndex].joke}</JokeQuote>
+      <JokeQuote>{isFetchingJokes ? 'Now loading...' : jokes[jokeIndex].joke}</JokeQuote>
       <SVGButton onClick={handleNext}>
         <img src="/static/imgs/arrow_forward.svg" alt="next-joke" />
       </SVGButton>
@@ -116,7 +117,24 @@ const SVGButton = styled.button`
 	}
 `;
 const JokeQuote = styled.h1`
-	text-align: center;
+  text-align: center;
+  text-shadow:
+    0 1px 0px #70DBB8,
+    1px 0 0px #70DBB8,
+    1px 2px 1px #70DBB8,
+    2px 1px 1px #70DBB8,
+    2px 3px 2px #70DBB8,
+    3px 2px 2px #70DBB8,
+    3px 4px 2px #70DBB8,
+    4px 3px 3px #70DBB8,
+    4px 5px 3px #70DBB8,
+    5px 4px 2px #5dabcd,
+    5px 6px 2px #378ab4,
+    6px 5px 2px #5dabcd,
+    6px 7px 1px #378ab4,
+    7px 6px 1px #5dabcd,
+    7px 8px 0px #378ab4,
+    8px 7px 0px #5dabcd;
 	width: 70%;
 	font-size: 2em;
 	@media (min-width: 768px) {
