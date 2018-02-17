@@ -17,14 +17,15 @@ import {
   Select,
 } from './Form';
 
+
 const mapDispatchToProps = dispatch => ({
   dispatchJokes: options => getJokes(dispatch, options),
   dispatchChange: (event) => {
     const { id, value = '' } = event.target;
     const cleanedValue = Number(value) || value.trim();
-    let options = { [id]: cleanedValue }
-    if (id === 'id') options = { [id]: cleanedValue, num: 0, category: 'all' }
-    else if (id === 'num') options = { [id]: cleanedValue, id: 0, }
+    let options = { [id]: cleanedValue };
+    if (id === 'id') options = { [id]: cleanedValue, num: 0, category: 'all' };
+    else if (id === 'num') options = { [id]: cleanedValue, id: 0 };
     dispatch(updateOptions(options));
   },
 });
@@ -59,7 +60,6 @@ const AdvanceSearch = ({
   handleSelectMultipleOrSingle,
   maxJokes,
   categories,
-  category,
 }) => (
   <Form onSubmit={handleSubmit}>
     <div>
@@ -104,9 +104,9 @@ const AdvanceSearch = ({
             placeholder="Specify number of jokes"
           />
           <Label htmlFor="categories">Categories</Label>
-          <Select name="category" id="category" value={category}>
+          <Select name="category" id="category" onChange={dispatchChange} value={options.category}>
             {categories.map(c => (
-              <option value={c}>
+              <option key={c} value={c}>
                 {c[0].toUpperCase() + c.substring(1)}
               </option>
 						))}
@@ -128,7 +128,7 @@ const AdvanceSearch = ({
       </Group>
       <Divider color="#AF5A76" border="dotted" />
       <Group borderSize="0" direction="column" justify="center">
-        <InputSubmit color="palevioletred" type="submit" value="Get some jokes!" />
+        <InputSubmit color="palevioletred" type="submit" value="Confirm!" />
       </Group>
     </div>
   </Form>
@@ -138,9 +138,11 @@ AdvanceSearch.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   options: PropTypes.shape({
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     num: PropTypes.number.isRequired,
-    query: PropTypes.object.isRequired,
+    category: PropTypes.string.isRequired,
   }).isRequired,
   dispatchChange: PropTypes.func.isRequired,
   isMultiple: PropTypes.bool.isRequired,

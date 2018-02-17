@@ -66,7 +66,7 @@ export default () => (
         <Button color="#70DBB8">BACK</Button>
       </Link>
       <PageTitle>Joke Statistic</PageTitle>
-      <div></div>
+      <div />
     </FlexBox>
     <FlexBox wrap="wrap" justify="space-around" alignItems="center">
       {mockedData.map(({ title, data }) => (

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Head from 'next/head'
+import Head from 'next/head';
 import { withState, compose, withHandlers, lifecycle } from 'recompose';
 import { injectGlobal } from 'styled-components';
 import withRedux from 'next-redux-wrapper';
@@ -8,7 +8,7 @@ import makeStore from '../store';
 import { getJokes, getNumberOfJokes, getCategories } from '../store/reducers';
 
 import FlexBox from '../components/FlexBox';
-import { Page, PageTitle } from '../components/Page'
+import { Page, PageTitle } from '../components/Page';
 import ModalForm from '../components/ModalForm';
 import FooterNav from '../components/FooterNav';
 import Jokes from '../components/Jokes';
@@ -29,8 +29,7 @@ const CenteredFlexbox = FlexBox.extend`
 `;
 
 const mapDispatchToProps = dispatch => ({
-  dispatchFetchJokes: (options, categories) =>
-    getJokes(dispatch, options, categories),
+  dispatchFetchJokes: (options, categories) => getJokes(dispatch, options, categories),
   dispatchFetchNumberOfJokes: () => getNumberOfJokes(dispatch),
   dispatchFetchCategories: () => getCategories(dispatch),
 });
@@ -39,24 +38,21 @@ const enhance = compose(
   withRedux(makeStore, state => state, mapDispatchToProps),
   withState('isModalActive', 'setModalActive', false),
   withHandlers({
-    handleToggleModal: ({ setModalActive }) => () => setModalActive(n => !n),
+    handleToggleModal: ({ setModalActive, isModalActive }) => () => {
+      setModalActive(n => !n)
+    },
     handleFetchRandomJoke: ({ dispatchFetchJokes }) => () => dispatchFetchJokes(),
   }),
   lifecycle({
     componentWillMount() {
       const {
-        options,
         categories,
-        dispatchFetchJokes,
         dispatchFetchCategories,
         dispatchFetchNumberOfJokes,
         maxJokes,
       } = this.props;
-      if (maxJokes !== 0) {
-        dispatchFetchJokes(options, categories);
-        dispatchFetchNumberOfJokes();
-        dispatchFetchCategories();
-      }
+      if (maxJokes === 0) dispatchFetchNumberOfJokes();
+      if (categories.length === 0) dispatchFetchCategories();
     },
   }),
 );

@@ -23,7 +23,7 @@ const FooterNav = ({ fetchRandomJoke, toggleModal, isFetchingJokes }) => (
       <div>
         {isFetchingJokes
         ? (<Button color="palevioletred">Please Wait</Button>)
-        : (<Button color="palevioletred" onClick={fetchRandomJoke}>Get Some random joke</Button>)}
+        : (<Button color="palevioletred" onClick={fetchRandomJoke}>Random joke</Button>)}
         {' '}
         <Button color=" #70C8DB" onClick={toggleModal}>Advance Search</Button>
         {' '}
@@ -36,7 +36,7 @@ const FooterNav = ({ fetchRandomJoke, toggleModal, isFetchingJokes }) => (
 );
 
 FooterNav.propTypes = {
-  dispatchFetchRandomJoke: PropTypes.func.isRequired,
+  fetchRandomJoke: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
   isFetchingJokes: PropTypes.bool.isRequired,
 };

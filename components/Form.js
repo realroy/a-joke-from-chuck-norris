@@ -60,6 +60,7 @@ export const Form = styled.form`
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
+	padding: 16px;
 `
 export const Select = styled.select`
 	background: white;
